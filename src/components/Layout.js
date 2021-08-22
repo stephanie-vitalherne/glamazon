@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Header from "./Header";
+import Footer from "./Footer";
 
 function Layout({ children, title }) {
   return (
@@ -11,6 +12,7 @@ function Layout({ children, title }) {
       </Head>
       <Header />
       {children}
+      <Footer />
     </div>
   );
 }

@@ -5,8 +5,12 @@ import {
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
 import { signIn, signOut, useSession } from "next-auth/client";
+import { useRouter } from "next/router";
 
 function Header() {
+  const [session] = useSession();
+  const router = useRouter();
+
   return (
     <header id="navtop">
       {/* Top */}
@@ -18,6 +22,7 @@ function Header() {
             height={40}
             objectFit="contain"
             className="cursor-pointer"
+            onClick={() => router.push("/")}
           />
         </div>
 
@@ -32,8 +37,12 @@ function Header() {
 
         {/* Right Buttons */}
         <div className="text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
-          <div onClick={signIn} className="link">
-            <p>Hello, Stephanie</p>
+          <div onClick={!session ? signIn : signOut} className="link">
+            <p>
+              {session
+                ? `Hello ${session.user.name.split(" ")[0]},`
+                : "Sign In"}
+            </p>
             <p className="bold">Account & Lists</p>
           </div>
 
@@ -42,7 +51,10 @@ function Header() {
             <p className="bold">& Orders</p>
           </div>
 
-          <div className="relative link flex items-end">
+          <div
+            onClick={() => router.push("/checkout")}
+            className="relative link flex items-end"
+          >
             <span className="absolute top-0 right-0 md:right-6 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold">
               0
             </span>

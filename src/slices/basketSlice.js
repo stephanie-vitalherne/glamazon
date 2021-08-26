@@ -11,7 +11,23 @@ export const basketSlice = createSlice({
     addToBasket: (state, action) => {
       state.items = [...state.items, action.payload];
     },
-    removeFromBasket: (state, action) => {},
+    removeFromBasket: (state, action) => {
+      const index = state.items.findIndex(
+        (cartItem) => cartItem.id === action.payload.id
+      );
+      let newCart = [...state.items];
+
+      if (index >= 0) {
+        // the item exists in the basket
+        newCart.splice(index, 1);
+      } else {
+        console.warn(
+          `Can't remove product (id: ${action.payload.id}) as its not in the basket`
+        );
+      }
+
+      state.items = newCart;
+    },
   },
 });
 

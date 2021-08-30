@@ -5,6 +5,8 @@ import Moment from "moment";
 
 function Orders({ orders }) {
   const [session] = useSession();
+  const orderNumber =
+    orders.length === 1 ? "1 Order" : `${orders.length} Orders`;
 
   return (
     <Layout>
@@ -14,15 +16,25 @@ function Orders({ orders }) {
         </h1>
 
         {session ? (
-          <h2>... Orders</h2>
+          <h2>{orderNumber}</h2>
         ) : (
           <h2>Please sign in to see your orders.</h2>
         )}
 
         <div className="mt-5 space-y-4">
-          {orders?.map((order) => (
-            <Order />
-          ))}
+          {orders?.map(
+            ({ id, amount, amountShipping, items, timestamp, images }) => (
+              <Order
+                key={id}
+                id={id}
+                amount={amount}
+                amountShipping={amountShipping}
+                items={items}
+                timestamp={timestamp}
+                images={images}
+              />
+            )
+          )}
         </div>
       </main>
     </Layout>
@@ -70,6 +82,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       orders,
+      session,
     },
   };
 }

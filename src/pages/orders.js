@@ -1,6 +1,6 @@
-import { useSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 import db from "../../firebase";
-import { Layout } from "../components";
+import { Layout, Order } from "../components";
 import Moment from "moment";
 
 function Orders({ orders }) {
@@ -19,7 +19,11 @@ function Orders({ orders }) {
           <h2>Please sign in to see your orders.</h2>
         )}
 
-        <div className="mt-5 space-y-4"></div>
+        <div className="mt-5 space-y-4">
+          {orders?.map((order) => (
+            <Order />
+          ))}
+        </div>
       </main>
     </Layout>
   );
@@ -31,7 +35,7 @@ export async function getServerSideProps(context) {
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
   // get users logged in credentials
-  const session = getSession(context);
+  const session = await getSession(context);
 
   if (!session) {
     return {
